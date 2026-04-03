@@ -181,7 +181,7 @@ class MCPClient:
         self._tools: dict[str, Any] = {}
 
     async def connect(self):
-        params = StdioServerParameters(command=sys.executable, args=[self.server_script])
+        params = StdioServerParameters(command=sys.executable, args=["-u", "-W", "ignore", self.server_script])
         self._cm = stdio_client(params)
         read, write = await self._cm.__aenter__()
         self._session = ClientSession(read, write)
