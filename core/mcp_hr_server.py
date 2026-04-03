@@ -20,9 +20,17 @@ import json
 import logging
 import os
 import sqlite3
+import sys
+import traceback
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+# CRITICAL FIX for MCP servers: 
+# Silence ALL standard output before imports so that LangChain/Pinecone don't corrupt JSON-RPC 
+# stream with unwanted logs. We restore it in the main function.
+_original_stdout = sys.stdout
+sys.stdout = open(os.devnull, "w")
 
 from dotenv import load_dotenv
 from mcp.server import Server
@@ -390,9 +398,22 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 # ── Entry point ───────────────────────────────────────────────────────────────
 
 async def _main():
+    # Restore stdout exactly when starting the true JSON-RPC stream handler!
+    sys.stdout = _original_stdout
     async with stdio_server() as (read, write):
-        await server.run(read, write)
+        try:
+            await server.run(read, write)
+        except Exception:
+            with open("/tmp/mcp_fatal_error.txt", "w") as err_f:
+                err_f.write(traceback.format_exc())
+            raise
 
 if __name__ == "__main__":
     import asyncio
-    asyncio.run(_main())
+    try:
+        asyncio.run(_main())
+    except Exception:
+        sys.stdout = _original_stdout
+        with open("/tmp/mcp_fatal_error.txt", "w") as err_f:
+            err_f.write(traceback.format_exc())
+        raise
