@@ -51,10 +51,12 @@ _mcp_client = None
 _agent      = None
 
 
+_agent_error = None
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Initialise MCP agent on startup, clean up on shutdown."""
-    global _mcp_client, _agent
+    global _mcp_client, _agent, _agent_error
     try:
         from core.hr_agent import MCPClient, HRAgent
         _mcp_client = MCPClient()
@@ -62,6 +64,8 @@ async def lifespan(app: FastAPI):
         _agent = HRAgent(_mcp_client, user_id="system")
         print("✅ HR Agent ready.")
     except Exception as exc:
+        import traceback
+        _agent_error = traceback.format_exc()
         print(f"⚠️  HR Agent unavailable: {exc}")
     yield
     if _mcp_client:
@@ -127,6 +131,7 @@ def health():
         "hr_db":       DB_PATH.exists(),
         "audit_db":    AUDIT_PATH.exists(),
         "agent_ready": _agent is not None,
+        "agent_error": _agent_error,
     }
 
 
