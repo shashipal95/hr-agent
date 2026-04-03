@@ -63,9 +63,9 @@ async def lifespan(app: FastAPI):
         
         try:
             res = subprocess.run([sys.executable, str(_SERVER_SCRIPT)], capture_output=True, text=True, timeout=3)
-            _agent_error = f"CRASH! Exit code: {res.returncode}\nSTDERR:\n{res.stderr[:1500]}\nSTDOUT:\n{res.stdout[:500]}"
+            raise RuntimeError(f"CRASH! Exit code: {res.returncode}\nSTDERR:\n{res.stderr[:1500]}\nSTDOUT:\n{res.stdout[:500]}")
         except subprocess.TimeoutExpired:
-            _agent_error = "TIMEOUT_EXPECTED (Script waiting normally on STDIO)"
+            pass # Timeout means it's waiting for STDIN normally
 
         _mcp_client = MCPClient()
         await _mcp_client.connect()
