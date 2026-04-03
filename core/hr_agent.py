@@ -171,32 +171,22 @@ def _extract_name(question: str) -> str | None:
 
 # ── MCP Client ────────────────────────────────────────────────────────────────
 
-_SERVER_SCRIPT = Path(__file__).parent / "mcp_hr_server.py"
-
+from core.mcp_hr_server import TOOLS, call_tool
 
 class MCPClient:
-    def __init__(self, server_script: str | Path = _SERVER_SCRIPT):
-        self.server_script = str(server_script)
-        self._session: ClientSession | None = None
+    def __init__(self, server_script: str | Path = None):
         self._tools: dict[str, Any] = {}
 
     async def connect(self):
-        params = StdioServerParameters(command=sys.executable, args=["-u", "-W", "ignore", self.server_script])
-        self._cm = stdio_client(params)
-        read, write = await self._cm.__aenter__()
-        self._session = ClientSession(read, write)
-        await self._session.__aenter__()
-        await self._session.initialize()
-        resp = await self._session.list_tools()
-        self._tools = {t.name: t for t in resp.tools}
-        log.info("MCP connected. Tools: %s", list(self._tools))
+        # Natively map the internal server tools without launching a subprocess
+        self._tools = {t.name: t for t in TOOLS}
+        log.info("Direct MCP connected. Tools: %s", list(self._tools))
 
     async def call(self, tool_name: str, args: dict) -> str:
-        if self._session is None:
-            raise RuntimeError("MCPClient not connected.")
         args = _sanitize_args(tool_name, args, self._tools)
-        resp = await self._session.call_tool(tool_name, args)
-        return "\n".join(b.text for b in resp.content if hasattr(b, "text"))
+        # Directly invoke the decorated function rather than serializing over JSON-RPC 
+        resp_list = await call_tool(tool_name, args)
+        return "\n".join(b.text for b in resp_list if hasattr(b, "text"))
 
     def tool_docs(self) -> str:
         lines = []
@@ -210,10 +200,7 @@ class MCPClient:
         return "\n".join(lines)
 
     async def disconnect(self):
-        if self._session:
-            await self._session.__aexit__(None, None, None)
-        if hasattr(self, "_cm"):
-            await self._cm.__aexit__(None, None, None)
+        pass
 
 
 # ── HR Agent ──────────────────────────────────────────────────────────────────
