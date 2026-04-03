@@ -16,7 +16,7 @@ venv/
 env/
 
 # Databases (contain sensitive employee data — never commit)
-*.db
+# *.db
 
 # Data (may contain PII)
 # data/employees.csv
