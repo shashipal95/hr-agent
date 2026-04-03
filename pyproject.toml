@@ -1,0 +1,26 @@
+[project]
+name = "hr-assistant"
+version = "2.0.0"
+description = "MCP-powered HR chatbot — Groq + Gemini Embeddings + Pinecone"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=1.0.0",
+    "langchain-groq>=0.1.0",
+    "langchain-google-genai>=4.2.1",
+    "pinecone<8.0.0",
+    "langchain-pinecone>=0.2.13",
+    "langchain-community>=0.2.0",
+    "langchain-text-splitters>=0.2.0",
+    "langchain-core>=0.2.0",
+    "pandas>=2.0.0",
+    "pypdf>=4.0.0",
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.29.0",
+    "streamlit>=1.35.0",
+    "python-dotenv>=1.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["core*", "app*"]

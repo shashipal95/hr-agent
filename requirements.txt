@@ -1,0 +1,30 @@
+# ── MCP (Model Context Protocol) ──────────────────────────────
+mcp>=1.0.0
+
+# ── LLM: Groq ─────────────────────────────────────────────────
+# Set GROQ_API_KEY in .env  →  https://console.groq.com
+langchain-groq>=0.1.0
+
+# ── Embeddings: Google Gemini ──────────────────────────────────
+# Set GOOGLE_API_KEY in .env  →  https://aistudio.google.com
+langchain-google-genai>=4.2.1
+
+# ── Vector Store: Pinecone ─────────────────────────────────────
+# Set PINECONE_API_KEY + PINECONE_ENV in .env  →  https://pinecone.io
+pinecone<8.0.0
+langchain-pinecone>=0.2.13
+
+# ── LangChain core ─────────────────────────────────────────────
+langchain-community>=0.2.0
+langchain-text-splitters>=0.2.0
+langchain-core>=0.2.0
+
+# ── Data & PDF ─────────────────────────────────────────────────
+pandas>=2.0.0
+pypdf>=4.0.0
+
+# ── Web API ────────────────────────────────────────────────────
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+python-dotenv>=1.0.0
+
