@@ -58,7 +58,15 @@ async def lifespan(app: FastAPI):
     """Initialise MCP agent on startup, clean up on shutdown."""
     global _mcp_client, _agent, _agent_error
     try:
-        from core.hr_agent import MCPClient, HRAgent
+        import subprocess, sys
+        from core.hr_agent import MCPClient, HRAgent, _SERVER_SCRIPT
+        
+        try:
+            res = subprocess.run([sys.executable, str(_SERVER_SCRIPT)], capture_output=True, text=True, timeout=3)
+            _agent_error = f"CRASH! Exit code: {res.returncode}\nSTDERR:\n{res.stderr[:1500]}\nSTDOUT:\n{res.stdout[:500]}"
+        except subprocess.TimeoutExpired:
+            _agent_error = "TIMEOUT_EXPECTED (Script waiting normally on STDIO)"
+
         _mcp_client = MCPClient()
         await _mcp_client.connect()
         _agent = HRAgent(_mcp_client, user_id="system")
