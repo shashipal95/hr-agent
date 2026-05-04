@@ -87,7 +87,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_ALLOWED_ORIGINS,
-    allow_origin_regex=r"https://.*\.(vercel\.app|up\.railway\.app)",  # Vercel + Railway previews
+    allow_origin_regex=r"https://.*\.(vercel\.app|up\.railway\.app|shashipal\.in)",  # Vercel + Railway previews
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
