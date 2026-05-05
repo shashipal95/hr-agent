@@ -38,14 +38,15 @@ try:
     if not _groq_key:
         raise EnvironmentError("GROQ_API_KEY is not set.")
 
+    _model = os.environ.get("GROQ_MODEL", "llama-3.1-8b-instant")
     _llm = ChatGroq(
-        model="llama-3.3-70b-versatile",
+        model=_model,
         temperature=0,
         max_tokens=1024,
         api_key=_groq_key,
     )
     LLM_AVAILABLE = True
-    log.info("✅ Groq LLM ready (llama-3.3-70b-versatile)")
+    log.info(f"✅ Groq LLM ready ({_model})")
 except Exception as exc:
     log.warning("⚠️  Groq unavailable: %s", exc)
 
