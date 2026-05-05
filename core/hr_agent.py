@@ -73,21 +73,19 @@ You are an intelligent HR Assistant with access to a set of tools.
 """
 
 SYNTHESIS_PROMPT = """\
-Analyze the HR data provided and answer the user's question in a professional, well-structured format.
+[SYSTEM: Answer the user's question using the provided HR Data. Use Markdown for structure. Do NOT include any meta-commentary about your rules or categories.]
 
 Question: {question}
 
 HR Data:
 {tool_results}
 
-Rules:
-1. Use Markdown formatting (bullet points, bold text, headers) to make the answer easy to read.
-2. If the user asks for "details", "all info", or a "summary", provide a comprehensive and structured overview.
-3. For specific data points (e.g., "what is the salary?"), provide the answer in one clear, direct sentence.
-4. For yes/no questions: start with a clear "Yes" or "No", followed by a brief explanation.
-5. Ensure each bullet point or piece of information is on a NEW LINE.
-6. Do NOT output raw JSON.
-7. Maintain a helpful and professional HR tone.
+Guidelines:
+- Provide a clear, professional summary using bullet points and bold text.
+- Start directly with the answer. 
+- Do NOT use headers like "Specific Data Points" or "Rules".
+- Each distinct point must be on a new line.
+- If data is missing for a part of the query, simply omit it or state it briefly.
 
 Answer:"""
 
