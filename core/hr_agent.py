@@ -107,15 +107,20 @@ async def _run_llm_async(prompt: str) -> str:
 
 
 async def _stream_llm(prompt: str) -> AsyncIterator[str]:
-    """Stream LLM output token by token."""
+    """True streaming for Groq LLM."""
     if not LLM_AVAILABLE or _llm is None:
-        raise RuntimeError("Groq LLM not available.")
-    loop = asyncio.get_event_loop()
-    full = await loop.run_in_executor(None, _run_llm, prompt)
-    # Groq streaming via LangChain; simulate token stream if needed
-    for char in full:
-        yield char
-        await asyncio.sleep(0)
+        yield "Groq LLM not available."
+        return
+    
+    # Use the native stream method if available
+    try:
+        async for chunk in _llm.astream(prompt):
+            content = chunk.content if hasattr(chunk, "content") else str(chunk)
+            if content:
+                yield content
+    except Exception as exc:
+        log.error("Streaming error: %s", exc)
+        yield f"Error during streaming: {exc}"
 
 
 # ── Arg sanitizer ─────────────────────────────────────────────────────────────
@@ -354,6 +359,12 @@ class HRAgent:
         ):
             result = await self.client.call("get_department_analytics", {})
             return ([f"[get_department_analytics]\n{result}"], None)
+
+        # FAST ROUTE: Policy questions
+        if any(kw in q for kw in ["policy", "leave", "pto", "remote", "conduct", "benefit"]):
+             await self._safe_audit("search_hr_policy", question)
+             result = await self.client.call("search_hr_policy", {"query": question})
+             return ([f"[search_hr_policy]\n{result}"], None)
 
         return None
 
