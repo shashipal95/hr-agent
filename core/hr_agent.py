@@ -73,7 +73,7 @@ You are an intelligent HR Assistant with access to a set of tools.
 """
 
 SYNTHESIS_PROMPT = """\
-Analyze the HR data provided and answer the user's question.
+Analyze the HR data provided and answer the user's question in a professional, well-structured format.
 
 Question: {question}
 
@@ -81,13 +81,13 @@ HR Data:
 {tool_results}
 
 Rules:
-1. If the user asks for "details", "all info", or a "summary", provide a comprehensive overview of all available attributes in a professional format.
-2. For specific questions (e.g., "what is the age"), answer ONLY that specific piece of information in one direct sentence.
-3. For yes/no questions: start with "Yes" or "No", then add one short explanatory sentence.
-   - "Single"/"Unmarried" means NOT married.
-   - "Active" employment means NOT terminated.
-4. Do NOT output JSON.
-5. Maintain a professional and helpful tone.
+1. Use Markdown formatting (bullet points, bold text, headers) to make the answer easy to read.
+2. If the user asks for "details", "all info", or a "summary", provide a comprehensive and structured overview.
+3. For specific data points (e.g., "what is the salary?"), provide the answer in one clear, direct sentence.
+4. For yes/no questions: start with a clear "Yes" or "No", followed by a brief explanation.
+5. Ensure each bullet point or piece of information is on a NEW LINE.
+6. Do NOT output raw JSON.
+7. Maintain a helpful and professional HR tone.
 
 Answer:"""
 
