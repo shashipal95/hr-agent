@@ -85,7 +85,8 @@ Guidelines:
 - Start directly with the answer. 
 - Each distinct point must be on a new line.
 - At the very end, add a horizontal divider (---).
-- Below the divider, add "**📚 Sources:**" followed by a unique, italicized bulleted list of the PDF filenames used.
+- Below the divider, add "**📚 Sources:**".
+- List the unique PDF filenames used. **IMPORTANT: List each filename ONLY ONCE**, even if multiple pieces of information came from the same file. Use an italicized bulleted list.
 - Do NOT output raw JSON or internal meta-commentary.
 
 Answer:"""
