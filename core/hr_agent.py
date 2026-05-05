@@ -73,7 +73,7 @@ You are an intelligent HR Assistant with access to a set of tools.
 """
 
 SYNTHESIS_PROMPT = """\
-[SYSTEM: Answer the user's question using the provided HR Data. Use Markdown for structure. Do NOT include any meta-commentary about your rules or categories.]
+[SYSTEM: Answer the user's question using the provided HR Data. Use Markdown for structure. Cite your sources clearly at the end.]
 
 Question: {question}
 
@@ -83,9 +83,9 @@ HR Data:
 Guidelines:
 - Provide a clear, professional summary using bullet points and bold text.
 - Start directly with the answer. 
-- Do NOT use headers like "Specific Data Points" or "Rules".
 - Each distinct point must be on a new line.
-- If data is missing for a part of the query, simply omit it or state it briefly.
+- At the very end, add a section "Sources:" and list the unique PDF filenames used.
+- Do NOT output raw JSON or internal meta-commentary.
 
 Answer:"""
 
