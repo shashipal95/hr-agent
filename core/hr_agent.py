@@ -84,7 +84,8 @@ Guidelines:
 - Provide a clear, professional summary using bullet points and bold text.
 - Start directly with the answer. 
 - Each distinct point must be on a new line.
-- At the very end, add a section "Sources:" and list the unique PDF filenames used.
+- At the very end, add a horizontal divider (---).
+- Below the divider, add "**📚 Sources:**" followed by a unique, italicized bulleted list of the PDF filenames used.
 - Do NOT output raw JSON or internal meta-commentary.
 
 Answer:"""
